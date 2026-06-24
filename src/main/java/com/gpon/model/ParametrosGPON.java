@@ -1,8 +1,5 @@
 package com.gpon.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ParametrosGPON {
     
     // Usamos Double (wrapper) para permitir valores nulos (campos não preenchidos pelo usuário)
@@ -70,7 +67,7 @@ public class ParametrosGPON {
         if (distance == null) return "distance";
         if (fiberAttenuation == null) return "fiberAttenuation";
         if (splitterLoss == null) return "splitterLoss";
-        if (connectorLoss == null) return "connectorLoss";
+        if (connectorLoss == null) return "conecctorLoss";
         if (spliceLoss == null) return "spliceLoss";
         if (margin == null) return "margin";
         return null;
