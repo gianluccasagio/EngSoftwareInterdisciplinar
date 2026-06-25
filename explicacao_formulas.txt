@@ -1,0 +1,55 @@
+=========================================================
+      COMO FUNCIONA O CALCULO DE LINK BUDGET GPON
+=========================================================
+
+1. A EQUACAO BASE
+A calculadora de Link Budget baseia-se em um princípio simples de conservação de potência óptica. Toda a luz (potência) que sai do transmissor vai sendo perdida ao longo do caminho devido aos componentes físicos, e o que sobra deve ser suficiente para que o receptor "enxergue" o sinal de forma clara, mantendo ainda uma margem de seguranca.
+
+A equação universal utilizada no projeto é:
+TxPower - Sensibilidade - (Distância * Atenuação) - Perdas(Splitters + Conectores + Fusões) - Margem = 0
+
+Onde cada componente significa:
+* TxPower (dBm): A forca do sinal luminoso que sai da OLT (Laser classe B+, C+, etc).
+* Sensibilidade (dBm): O sinal mínimo que a ONU/ONT (na casa do cliente) precisa receber para funcionar. É um valor negativo (ex: -27 dBm).
+* Distância (km): O tamanho do cabo de fibra óptica.
+* Atenuação (dB/km): O quanto de luz se perde por quilômetro percorrido na fibra (tipicamente 0.25 a 0.35 para GPON).
+* Splitter Loss (dB): A perda gigantesca gerada ao dividir o sinal óptico (ex: 1:64, 1:128).
+* Connector Loss (dB): Perda de luz nos conectores mecânicos (APCs, UPCs).
+* Splice Loss (dB): Perda gerada nas fusões (emendas) da fibra óptica.
+* Margem (dB): Uma margem extra de "folga" para caso a fibra degrade ou rompa no futuro (geralmente usa-se no mínimo 3 dB).
+
+---------------------------------------------------------
+
+2. COMO O ALGORITMO FUNCIONA
+
+O grande diferencial do software desenvolvido é que ele resolve qualquer incógnita dessa equação. O usuário pode preencher 7 das 8 variáveis e deixar exatamente UMA em branco.
+
+O algoritmo entao isola algebricamente essa variável para resolver o problema:
+
+Se falta o Tx Power:
+TxPower = Sensibilidade + (Dist. * Atenuacao) + Splitters + Conectores + Fusoes + Margem
+
+Se falta a Sensibilidade:
+Sensibilidade = TxPower - (Dist. * Atenuacao) - Splitters - Conectores - Fusoes - Margem
+
+Se falta a Distância:
+Distancia = (TxPower - Sensibilidade - Splitters - Conectores - Fusoes - Margem) / Atenuacao
+
+Se falta a Atenuação da Fibra:
+Atenuacao = (TxPower - Sensibilidade - Splitters - Conectores - Fusoes - Margem) / Distancia
+
+Se falta as Perdas do Splitter:
+Splitters = TxPower - Sensibilidade - (Dist. * Atenuacao) - Conectores - Fusoes - Margem
+
+Se falta a Margem de Seguranca:
+Margem = TxPower - Sensibilidade - (Dist. * Atenuacao) - Splitters - Conectores - Fusoes
+
+E assim por diante.
+
+---------------------------------------------------------
+
+3. REGRAS DE MATEMATICA E NEGOCIO
+
+Alem da álgebra simples mostrada acima, o código (Classe ValidadorLimites) entende o contexto de Telecomunicações e aplica regras:
+- Se você calcular a Atenuação e ela der 0, significa um erro lógico, o software protege contra "Divisão por Zero".
+- Se a Distância for muito longa (ex: > 20km) ou a Margem muito baixa (< 3 dB), a matemática até resolve, mas o sistema avisa: "O cálculo deu certo, mas esse projeto não vai funcionar bem no mundo real!".
