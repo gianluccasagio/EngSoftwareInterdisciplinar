@@ -1,0 +1,75 @@
+======================================
+CENÁRIO 1: Descobrir Distância Máxima
+======================================
+Valores para preencher na interface:
+Potência Tx (dBm)        : 2.5
+Sensibilidade Rx (dBm)   : -28
+Distância (km)           : [DEIXAR EM BRANCO]
+Atenuação Fibra (dB/km)  : 0.25
+Perda Splitters (dB)     : 17.5
+Perda Conectores (dB)    : 1.0
+Perda Fusões (dB)        : 0.5
+Margem Segurança (dB)    : 3.0
+
+>>> VALOR ESPERADO APÓS CALCULAR:
+Distância (km) = 34.00
+Alerta esperado: "Aviso: Distância excede 20 km..."
+
+
+======================================
+CENÁRIO 2: Descobrir Margem de Segurança
+======================================
+Valores para preencher na interface:
+Potência Tx (dBm)        : 2.5
+Sensibilidade Rx (dBm)   : -28
+Distância (km)           : 20
+Atenuação Fibra (dB/km)  : 0.25
+Perda Splitters (dB)     : 17.5
+Perda Conectores (dB)    : 1.0
+Perda Fusões (dB)        : 0.5
+Margem Segurança (dB)    : [DEIXAR EM BRANCO]
+
+>>> VALOR ESPERADO APÓS CALCULAR:
+Margem Segurança (dB) = 6.50
+Alerta esperado: Projeto dentro dos padrões.
+
+
+======================================
+CENÁRIO 3: Descobrir Potência Tx Mínima
+======================================
+Valores para preencher na interface:
+Potência Tx (dBm)        : [DEIXAR EM BRANCO]
+Sensibilidade Rx (dBm)   : -28
+Distância (km)           : 20
+Atenuação Fibra (dB/km)  : 0.25
+Perda Splitters (dB)     : 20.5
+Perda Conectores (dB)    : 1.5
+Perda Fusões (dB)        : 1.0
+Margem Segurança (dB)    : 3.0
+
+>>> VALOR ESPERADO APÓS CALCULAR:
+Potência Tx (dBm) = 3.00
+Alerta esperado: Projeto dentro dos padrões.
+
+
+======================================
+CENÁRIO 4: Teste de Validação (Avisos de Erro)
+======================================
+Valores para preencher na interface:
+Potência Tx (dBm)        : 0.5
+Sensibilidade Rx (dBm)   : -35
+Distância (km)           : 25
+Atenuação Fibra (dB/km)  : 0.5
+Perda Splitters (dB)     : [DEIXAR EM BRANCO]
+Perda Conectores (dB)    : 1.0
+Perda Fusões (dB)        : 0.5
+Margem Segurança (dB)    : 1.0
+
+>>> VALORES E ALERTAS ESPERADOS:
+Perda Splitters (dB) = 20.50
+Múltiplos alertas esperados na caixa de texto:
+- "Aviso: Atenuação da fibra fora do padrão..."
+- "Aviso: Distância excede 20 km..."
+- "Aviso: Potência de transmissão (Tx) fora da classe típica..."
+- "Aviso: Sensibilidade fora do padrão..."
+- "Aviso: Margem de segurança inferior a 3 dB..."
